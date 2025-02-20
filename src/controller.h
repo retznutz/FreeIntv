@@ -28,8 +28,8 @@ int getControllerState(int joypad[], int player);
 
 int getKeypadState(int player, int joypad[], int joypre[]);
 
-void setControllerInput(int player, int state); 
+void setControllerInput(int player, int state);
 
-void drawMiniKeypad(int player, unsigned int frame[]);
+// void drawMiniKeypad(int player, unsigned int frame[]);
 
 #endif

@@ -54,10 +54,10 @@ void retro_set_input_state(retro_input_state_t fn) { InputState = fn; }
 
 struct retro_game_geometry Geometry;
 
-int joypad0[24]; // joypad 0 state
-int joypad1[24]; // joypad 1 state
-int joypre0[24]; // joypad 0 previous state
-int joypre1[24]; // joypad 1 previous state
+int joypad0[25]; // joypad 0 state
+int joypad1[25]; // joypad 1 state
+int joypre0[25]; // joypad 0 previous state
+int joypre1[25]; // joypad 1 previous state
 
 bool paused = false;
 
@@ -257,7 +257,7 @@ void retro_run(void)
 
 	InputPoll();
 
-	for (i = 0; i < 24; i++) // Copy previous state
+	for (i = 0; i < 25; i++) // Copy previous state
 	{
 		joypre0[i] = joypad0[i];
 		joypre1[i] = joypad1[i];

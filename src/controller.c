@@ -24,15 +24,15 @@ const double PI = 3.14159265358979323846;
 #define K_1 0x81
 #define K_2 0x41
 #define K_3 0x21
-#define K_4 0x82
-#define K_5 0x42
-#define K_6 0x22
-#define K_7 0x84
+#define K_4 0x22
+#define K_5 0x84
+#define K_6 0x82
+#define K_7 0x42
 #define K_8 0x44
-#define K_9 0x24
-#define K_0 0x48
-#define K_C 0x88
-#define K_E 0x28
+#define K_9 0x48
+#define K_0 0x24
+#define K_C 0x28
+#define K_E 0x88
 
 #define B_TOP 0xA0
 #define B_LEFT 0x60
@@ -66,7 +66,7 @@ int keypadStates[12] = {K_1, K_2, K_3, K_4, K_5, K_6, K_7, K_8, K_9, K_C, K_0, K
 
 int cursor[4] = {0, 0, 0, 0}; // mini keypad cursor (button row/column p0x,p0y p1x,p1y)
 
-int getQuickKeypadState(int player);
+//int getQuickKeypadState(int player);
 
 void controllerInit()
 {
@@ -85,12 +85,12 @@ void setControllerInput(int player, int state)
 int getControllerState(int joypad[], int player)
 {
 	// converts joypad input for use by system
-	int Lx = 0;	  // left analog X
-	int Ly = 0;	  // left analog Y
-	int Rx = 0;	  // right analog X
-	int Ry = 0;	  // right analog Y
-	double theta; // analog joy angle
-	int norm;	  // theta, normalized
+	// int Lx = 0;	  // left analog X
+	// int Ly = 0;	  // left analog Y
+	// int Rx = 0;	  // right analog X
+	// int Ry = 0;	  // right analog Y
+	// double theta; // analog joy angle
+	// int norm;	  // theta, normalized
 
 	int state = 0; // 0xFF;
 
@@ -128,10 +128,6 @@ int getControllerState(int joypad[], int player)
 		state |= D_SE;
 	} // 0x3C - Down+Right
 
-	if (joypad[7] != 0)
-	{
-		state |= B_TOP;
-	} // 0x5F - Button Top
 	if (joypad[4] != 0)
 	{
 		state |= B_LEFT;
@@ -141,10 +137,10 @@ int getControllerState(int joypad[], int player)
 		state |= B_RIGHT;
 	} // 0x3F - Button Right
 
-	if (joypad[6] != 0)
-	{
-		state |= getQuickKeypadState(player);
-	}
+	// if (joypad[6] != 0)
+	// {
+	// 	state |= getQuickKeypadState(player);
+	// }
 
 	/* Analog Controls for 16-way disc control */
 
@@ -187,54 +183,56 @@ int getControllerState(int joypad[], int player)
 	// if(joypad[12]!=0) { state |= K_C; } // 0x88 - Keypad Clear
 	// if(joypad[13]!=0) { state |= K_E; } // 0x28 - Keypad Enter
 
-	if (joypad[14] != 0)
+	if (joypad[10] != 0)
 	{
 		state |= K_1;
 	}
-	if (joypad[15] != 0)
+	if (joypad[11] != 0)
 	{
 		state |= K_2;
 	}
-	if (joypad[16] != 0)
+	if (joypad[6] != 0)
 	{
 		state |= K_3;
-	}
-	if (joypad[17] != 0)
+	} // 0x5F - Button Top
+
+	if (joypad[12] != 0)
 	{
 		state |= K_4;
 	}
-	if (joypad[18] != 0)
+	if (joypad[13] != 0)
 	{
 		state |= K_5;
 	}
-	if (joypad[19] != 0)
+	if (joypad[14] != 0)
 	{
 		state |= K_6;
 	}
-	if (joypad[20] != 0)
+	if (joypad[15] != 0)
 	{
 		state |= K_7;
 	}
-	if (joypad[21] != 0)
+	if (joypad[16] != 0)
 	{
 		state |= K_8;
 	}
-	if (joypad[22] != 0)
+	if (joypad[17] != 0)
 	{
 		state |= K_9;
 	}
-	if (joypad[23] != 0)
+	if (joypad[18] != 0)
 	{
 		state |= K_C;
 	}
-	if (joypad[24] != 0)
+	if (joypad[19] != 0)
 	{
 		state |= K_0;
 	}
-	if (joypad[25] != 0)
+	if (joypad[20] != 0)
 	{
 		state |= K_E;
 	}
+
 
 	return state;
 }
@@ -242,63 +240,63 @@ int getControllerState(int joypad[], int player)
 // Mini keypads, displayed in the corner using a shoulder button,
 // should better enable controller-only play. miniKeypadImage
 
-int getKeypadState(int player, int joypad[], int joypre[])
-{
-	int cursorX = cursor[player * 2];
-	int cursorY = cursor[player * 2 + 1];
-	int state = 0x0;
+// int getKeypadState(int player, int joypad[], int joypre[])
+// {
+// 	int cursorX = cursor[player * 2];
+// 	int cursorY = cursor[player * 2 + 1];
+// 	int state = 0x0;
 
-	// move cursor only on button down
-	if (joypre[0] == 0 && joypad[0] != 0)
-	{
-		cursorY--;
-		if (cursorY < 0)
-		{
-			cursorY = 3;
-		}
-	} // up
-	if (joypre[1] == 0 && joypad[1] != 0)
-	{
-		cursorY++;
-		if (cursorY > 3)
-		{
-			cursorY = 0;
-		}
-	} // down
-	if (joypre[2] == 0 && joypad[2] != 0)
-	{
-		cursorX--;
-		if (cursorX < 0)
-		{
-			cursorX = 2;
-		}
-	} // left
-	if (joypre[3] == 0 && joypad[3] != 0)
-	{
-		cursorX++;
-		if (cursorX > 2)
-		{
-			cursorX = 0;
-		}
-	} // right
+// 	// move cursor only on button down
+// 	if (joypre[0] == 0 && joypad[0] != 0)
+// 	{
+// 		cursorY--;
+// 		if (cursorY < 0)
+// 		{
+// 			cursorY = 3;
+// 		}
+// 	} // up
+// 	if (joypre[1] == 0 && joypad[1] != 0)
+// 	{
+// 		cursorY++;
+// 		if (cursorY > 3)
+// 		{
+// 			cursorY = 0;
+// 		}
+// 	} // down
+// 	if (joypre[2] == 0 && joypad[2] != 0)
+// 	{
+// 		cursorX--;
+// 		if (cursorX < 0)
+// 		{
+// 			cursorX = 2;
+// 		}
+// 	} // left
+// 	if (joypre[3] == 0 && joypad[3] != 0)
+// 	{
+// 		cursorX++;
+// 		if (cursorX > 2)
+// 		{
+// 			cursorX = 0;
+// 		}
+// 	} // right
 
-	cursor[player * 2] = cursorX;
-	cursor[player * 2 + 1] = cursorY;
+// 	cursor[player * 2] = cursorX;
+// 	cursor[player * 2 + 1] = cursorY;
 
-	// let any face button press keypad
-	if (joypad[4] != 0 || joypad[5] != 0 || joypad[6] != 0 || joypad[7] != 0)
-	{
-		state = keypadStates[(cursorY * 3) + cursorX];
-	}
-	return state;
-}
+// 	// let any face button press keypad
+// 	if (joypad[4] != 0 || joypad[5] != 0 || joypad[6] != 0 || joypad[7] != 0)
+// 	{
+// 		state = keypadStates[(cursorY * 3) + cursorX];
+// 	}
+// 	return state;
+// }
 
-int getQuickKeypadState(int player)
-{
-	int cursorX = cursor[player * 2];
-	int cursorY = cursor[player * 2 + 1];
-	return keypadStates[(cursorY * 3) + cursorX];
-}
+// int getQuickKeypadState(int player)
+// {
+// 	int cursorX = cursor[player * 2];
+// 	int cursorY = cursor[player * 2 + 1];
+// 	return keypadStates[(cursorY * 3) + cursorX];
+// }
 
 // void drawMiniKeypad(int player, unsigned int frame[])
 // {

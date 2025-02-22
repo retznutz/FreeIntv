@@ -26,7 +26,7 @@ void controllerInit(void);
 
 int getControllerState(int joypad[], int player);
 
-int getKeypadState(int player, int joypad[], int joypre[]);
+//int getKeypadState(int player, int joypad[], int joypre[]);
 
 void setControllerInput(int player, int state);
 

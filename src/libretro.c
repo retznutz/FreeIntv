@@ -54,10 +54,8 @@ void retro_set_input_state(retro_input_state_t fn) { InputState = fn; }
 
 struct retro_game_geometry Geometry;
 
-int joypad0[25]; // joypad 0 state
-int joypad1[25]; // joypad 1 state
-int joypre0[25]; // joypad 0 previous state
-int joypre1[25]; // joypad 1 previous state
+int joypad0[21]; // joypad 0 state
+int joypre0[21]; // joypad 1 state
 
 bool paused = false;
 
@@ -144,69 +142,28 @@ void retro_init(void)
 
 	// controller descriptors
 	struct retro_input_descriptor desc[] = {
-		{0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_LEFT, "Disc Left"},
 		{0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_UP, "Disc Up"},
 		{0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_DOWN, "Disc Down"},
+		{0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_LEFT, "Disc Left"},
 		{0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_RIGHT, "Disc Right"},
 		{0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_A, "Left Action Button"},
 		{0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_B, "Right Action Button"},
+		{0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_X, "Keypad 3"},
 		{0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_Y, "Top Action Button"},
-		{0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_X, "Last Selected Keypad Button"},
 		{0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_SELECT, "Swap Left/Right Controllers"},
 		{0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_START, "Console Pause"},
-		{0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_L, "Show Keypad"},
-		{0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_R, "Show Keypad"},
-		// { 0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_L2,     "Keypad Clear" },
-		// { 0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_R2,     "Keypad Enter" },
-		// { 0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_L3,     "Keypad 0" },
-		// { 0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_R3,     "Keypad 5" },
-		{0, RETRO_DEVICE_KEYBOARD, 0, RETROK_1, "Keypad 1"},
-		{0, RETRO_DEVICE_KEYBOARD, 0, RETROK_2, "Keypad 2"},
-		{0, RETRO_DEVICE_KEYBOARD, 0, RETROK_3, "Keypad 3"},
-		{0, RETRO_DEVICE_KEYBOARD, 0, RETROK_4, "Keypad 4"},
-		{0, RETRO_DEVICE_KEYBOARD, 0, RETROK_5, "Keypad 5"},
-		{0, RETRO_DEVICE_KEYBOARD, 0, RETROK_6, "Keypad 6"},
-		{0, RETRO_DEVICE_KEYBOARD, 0, RETROK_7, "Keypad 7"},
-		{0, RETRO_DEVICE_KEYBOARD, 0, RETROK_8, "Keypad 8"},
-		{0, RETRO_DEVICE_KEYBOARD, 0, RETROK_9, "Keypad 9"},
-		{0, RETRO_DEVICE_KEYBOARD, 0, RETROK_c, "Keypad Clear"},
-		{0, RETRO_DEVICE_KEYBOARD, 0, RETROK_0, "Keypad 0"},
-		{0, RETRO_DEVICE_KEYBOARD, 0, RETROK_e, "Keypad Enter"},
-
-		// { 0, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_RIGHT, RETRO_DEVICE_ID_ANALOG_X, "Keypad [1-9]" },
-		// { 0, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_RIGHT, RETRO_DEVICE_ID_ANALOG_Y, "Keypad [1-9]" },
-
-		{1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_LEFT, "Disc Left"},
-		{1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_UP, "Disc Up"},
-		{1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_DOWN, "Disc Down"},
-		{1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_RIGHT, "Disc Right"},
-		{1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_A, "Left Action Button"},
-		{1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_B, "Right Action Button"},
-		{1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_Y, "Top Action Button"},
-		{1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_X, "Last Selected Keypad Button"},
-		{1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_SELECT, "Swap Left/Right Controllers"},
-		{1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_START, "Console Pause"},
-		{1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_L, "Show Keypad"},
-		{1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_R, "Show Keypad"},
-		// { 1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_L2,     "Keypad Clear" },
-		// { 1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_R2,     "Keypad Enter" },
-		// { 1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_L3,     "Keypad 0" },
-		// { 1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_R3,     "Keypad 5" },
-		// { 1, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_RIGHT, RETRO_DEVICE_ID_ANALOG_X, "Keypad [1-9]" },
-		// { 1, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_RIGHT, RETRO_DEVICE_ID_ANALOG_Y, "Keypad [1-9]" },
-		{1, RETRO_DEVICE_KEYBOARD, 0, RETROK_1, "Keypad 1"},
-		{1, RETRO_DEVICE_KEYBOARD, 0, RETROK_2, "Keypad 2"},
-		{1, RETRO_DEVICE_KEYBOARD, 0, RETROK_3, "Keypad 3"},
-		{1, RETRO_DEVICE_KEYBOARD, 0, RETROK_4, "Keypad 4"},
-		{1, RETRO_DEVICE_KEYBOARD, 0, RETROK_5, "Keypad 5"},
-		{1, RETRO_DEVICE_KEYBOARD, 0, RETROK_6, "Keypad 6"},
-		{1, RETRO_DEVICE_KEYBOARD, 0, RETROK_7, "Keypad 7"},
-		{1, RETRO_DEVICE_KEYBOARD, 0, RETROK_8, "Keypad 8"},
-		{1, RETRO_DEVICE_KEYBOARD, 0, RETROK_9, "Keypad 9"},
-		{1, RETRO_DEVICE_KEYBOARD, 0, RETROK_c, "Keypad Clear"},
-		{1, RETRO_DEVICE_KEYBOARD, 0, RETROK_0, "Keypad 0"},
-		{1, RETRO_DEVICE_KEYBOARD, 0, RETROK_e, "Keypad Enter"},
-
+		
+		{0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_L, "Keypad 1"},
+		{0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_R, "Keypad 2"},
+		{0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_L3, "Keypad 4"},
+		{0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_R3, "Keypad 5"},
+		{0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_L2, "Keypad 6"},
+		{0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_R2, "Keypad 7"},
+		{1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_X, "Keypad 8"},
+		{1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_L3, "Keypad 9"},
+		{1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_R3, "Keypad Clear"},
+		{1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_L2, "Keypad 0"},
+		{1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_R2, "Keypad Enter"},
 		{0},
 	};
 
@@ -252,15 +209,15 @@ void retro_unload_game(void)
 void retro_run(void)
 {
 	int c, i, j, k, l;
-	int showKeypad0 = false;
-	int showKeypad1 = false;
+	// int showKeypad0 = false;
+	// int showKeypad1 = false;
 
 	InputPoll();
 
-	for (i = 0; i < 25; i++) // Copy previous state
+	for (i = 0; i < 21; i++) // Copy previous state
 	{
 		joypre0[i] = joypad0[i];
-		joypre1[i] = joypad1[i];
+		//joypre1[i] = joypad1[i];
 	}
 
 	/* JoyPad 0 */
@@ -281,68 +238,18 @@ void retro_run(void)
 	joypad0[11] = InputState(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_R);
 	joypad0[12] = InputState(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_L2);
 	joypad0[13] = InputState(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_R2);
+	joypad0[14] = InputState(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_L3);
+	joypad0[15] = InputState(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_R3);
 
-	// joypad0[14] = InputState(0, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_LEFT, RETRO_DEVICE_ID_ANALOG_X);
-	// joypad0[15] = InputState(0, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_LEFT, RETRO_DEVICE_ID_ANALOG_Y);
-	// joypad0[16] = InputState(0, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_RIGHT, RETRO_DEVICE_ID_ANALOG_X);
-	// joypad0[17] = InputState(0, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_RIGHT, RETRO_DEVICE_ID_ANALOG_Y);
-	// joypad0[18] = InputState(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_L3);
-	// joypad0[19] = InputState(0, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_R3);
+	joypad0[16] = InputState(1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_X);
+	joypad0[17] = InputState(1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_L2);
+	joypad0[18] = InputState(1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_R2);
+	joypad0[19] = InputState(1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_L3);
+	joypad0[20] = InputState(1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_R3);
 
-	joypad0[14] = InputState(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_1);
-	joypad0[15] = InputState(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_2);
-	joypad0[16] = InputState(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_3);
-	joypad0[17] = InputState(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_4);
-	joypad0[18] = InputState(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_5);
-	joypad0[19] = InputState(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_6);
-	joypad0[20] = InputState(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_7);
-	joypad0[21] = InputState(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_8);
-	joypad0[22] = InputState(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_9);
-	joypad0[23] = InputState(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_c);
-	joypad0[24] = InputState(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_0);
-	joypad0[25] = InputState(0, RETRO_DEVICE_KEYBOARD, 0, RETROK_e);
-
-	/* JoyPad 1 */
-	joypad1[0] = InputState(1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_UP);
-	joypad1[1] = InputState(1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_DOWN);
-	joypad1[2] = InputState(1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_LEFT);
-	joypad1[3] = InputState(1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_RIGHT);
-
-	joypad1[4] = InputState(1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_A);
-	joypad1[5] = InputState(1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_B);
-	joypad1[6] = InputState(1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_X);
-	joypad1[7] = InputState(1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_Y);
-
-	joypad1[8] = InputState(1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_START);
-	joypad1[9] = InputState(1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_SELECT);
-
-	joypad1[10] = InputState(1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_L);
-	joypad1[11] = InputState(1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_R);
-	joypad1[12] = InputState(1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_L2);
-	joypad1[13] = InputState(1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_R2);
-
-	// joypad1[14] = InputState(1, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_LEFT, RETRO_DEVICE_ID_ANALOG_X);
-	// joypad1[15] = InputState(1, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_LEFT, RETRO_DEVICE_ID_ANALOG_Y);
-	// joypad1[16] = InputState(1, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_RIGHT, RETRO_DEVICE_ID_ANALOG_X);
-	// joypad1[17] = InputState(1, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_RIGHT, RETRO_DEVICE_ID_ANALOG_Y);
-	// joypad1[18] = InputState(1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_L3);
-	// joypad1[19] = InputState(1, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_R3);
-
-	joypad1[14] = InputState(1, RETRO_DEVICE_KEYBOARD, 0, RETROK_1);
-	joypad1[15] = InputState(1, RETRO_DEVICE_KEYBOARD, 0, RETROK_2);
-	joypad1[16] = InputState(1, RETRO_DEVICE_KEYBOARD, 0, RETROK_3);
-	joypad1[17] = InputState(1, RETRO_DEVICE_KEYBOARD, 0, RETROK_4);
-	joypad1[18] = InputState(1, RETRO_DEVICE_KEYBOARD, 0, RETROK_5);
-	joypad1[19] = InputState(1, RETRO_DEVICE_KEYBOARD, 0, RETROK_6);
-	joypad1[20] = InputState(1, RETRO_DEVICE_KEYBOARD, 0, RETROK_7);
-	joypad1[21] = InputState(1, RETRO_DEVICE_KEYBOARD, 0, RETROK_8);
-	joypad1[22] = InputState(1, RETRO_DEVICE_KEYBOARD, 0, RETROK_9);
-	joypad1[23] = InputState(1, RETRO_DEVICE_KEYBOARD, 0, RETROK_c);
-	joypad1[24] = InputState(1, RETRO_DEVICE_KEYBOARD, 0, RETROK_0);
-	joypad1[25] = InputState(1, RETRO_DEVICE_KEYBOARD, 0, RETROK_e);
 
 	// Pause
-	if ((joypad0[8] == 1 && joypre0[8] == 0) || (joypad1[8] == 1 && joypre1[8] == 0))
+	if (joypad0[8] == 1 && joypre0[8] == 0)
 	{
 		paused = !paused;
 		if (paused)
@@ -355,7 +262,7 @@ void retro_run(void)
 	if (paused)
 	{
 		// help menu //
-		if (joypad0[4] == 1 || joypad1[4] == 1)
+		if (joypad0[4] == 1)
 		{
 			OSD_drawTextBG(3, 4, "                                      ");
 			OSD_drawTextBG(3, 5, "               - HELP -               ");
@@ -376,33 +283,33 @@ void retro_run(void)
 	}
 	else
 	{
-		if (joypad0[10] | joypad0[11]) // left/right shoulder down
-		{
-			showKeypad0 = true;
-			//	setControllerInput(0, getKeypadState(0, joypad0, joypre0));
-		}
-		else
-		{
-			showKeypad0 = false;
-			//	setControllerInput(0, getControllerState(joypad0, 0));
-		}
+		// if (joypad0[10] | joypad0[11]) // left/right shoulder down
+		// {
+		// 	showKeypad0 = true;
+		// 	//	setControllerInput(0, getKeypadState(0, joypad0, joypre0));
+		// }
+		// else
+		// {
+		// 	showKeypad0 = false;
+			setControllerInput(0, getControllerState(joypad0, 0));
+		// }
 
-		if (joypad1[10] | joypad1[11]) // left shoulder down
-		{
-			showKeypad1 = true;
-			//	setControllerInput(1, getKeypadState(1, joypad1, joypre1));
-		}
-		else
-		{
-			showKeypad1 = false;
-			//	setControllerInput(1, getControllerState(joypad1, 1));
-		}
+		// if (joypad1[10] | joypad1[11]) // left shoulder down
+		// {
+		// 	showKeypad1 = true;
+		// 	//	setControllerInput(1, getKeypadState(1, joypad1, joypre1));
+		// }
+		// else
+		// {
+		// 	showKeypad1 = false;
+			//setControllerInput(1, getControllerState(joypad1, 1));
+		// }
 
-		if (keyboardDown || keyboardChange)
-		{
-			setControllerInput(0, keyboardState);
-			keyboardChange = false;
-		}
+		// if (keyboardDown || keyboardChange)
+		// {
+		// 	setControllerInput(0, keyboardState);
+		// 	keyboardChange = false;
+		// }
 
 		// grab frame
 		Run();
@@ -457,9 +364,9 @@ void retro_run(void)
 	}
 
 	// Swap Left/Right Controller
-	if (joypad0[9] == 1 || joypad1[9] == 1)
+	if (joypad0[9] == 1)
 	{
-		if ((joypad0[9] == 1 && joypre0[9] == 0) || (joypad1[9] == 1 && joypre1[9] == 0))
+		if ((joypad0[9] == 1 && joypre0[9] == 0))
 		{
 			controllerSwap = controllerSwap ^ 1;
 		}
